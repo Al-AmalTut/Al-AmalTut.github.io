@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -273,8 +272,18 @@ button.back:hover{border-color:var(--ink-soft)}
 .done .mark{width:52px;height:52px;margin:0 auto 16px;border-radius:50%;background:var(--ok);display:grid;place-items:center}
 .done .mark svg{width:25px;height:25px;stroke:#fff;stroke-width:2.6;fill:none}
 .done h2{font-size:23px}
-.refbox{display:inline-block;margin:16px 0 6px;padding:11px 20px;border:1px dashed var(--ink);border-radius:8px;font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:.05em}
 .foot{text-align:center;font-size:12.5px;color:var(--graphite);margin-top:22px;line-height:1.7}
+.phone{display:flex;align-items:stretch;border:1px solid var(--rule);border-radius:8px;background:var(--card);overflow:hidden}
+.phone .cc{display:grid;place-items:center;padding:0 12px;background:#F1F4F9;border-inline-end:1px solid var(--rule);
+  font-size:14.5px;color:var(--graphite);white-space:nowrap;letter-spacing:.01em}
+.phone input{border:none;border-radius:0;flex:1;min-width:0;background:transparent}
+.phone input:focus{outline:none}
+.phone:focus-within{outline:2px solid var(--ink);outline-offset:1px;border-color:var(--ink)}
+.phone.bad{border-color:var(--red);background:var(--red-soft)}
+.offer{background:var(--red-soft);border:1px solid #F1D9D5;border-radius:8px;padding:12px 14px;
+  margin-bottom:16px;font-size:13.5px;color:var(--red);line-height:1.5}
+.offer b{font-weight:600}
+.donesum{text-align:start;border:1px solid var(--rule);border-radius:9px;padding:4px 14px;margin:18px 0 4px}
 .stickytotal{position:fixed;inset-inline:0;bottom:0;background:var(--ink);color:#fff;
   padding:12px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;
   font-size:13px;box-shadow:0 -4px 18px rgba(27,42,74,.22);z-index:30}
@@ -337,21 +346,17 @@ button.back:hover{border-color:var(--ink-soft)}
       </div>
     </div>
 
-    <div class="row">
-      <div class="field">
-        <label for="school" data-t="school">Current school</label>
-        <input id="school" type="text">
-        <div class="err" data-t="req">Required</div>
-      </div>
-      <div class="field">
-        <label for="sect" data-t="sect">Class section <span class="opt" data-t="optional">(optional)</span></label>
-        <input id="sect" type="text" placeholder="9-B">
-      </div>
+    <div class="field">
+      <label for="school" data-t="school">Current school</label>
+      <input id="school" type="text">
+      <div class="err" data-t="req">Required</div>
+    </div>
     </div>
 
     <div class="field">
       <label for="sphone" data-t="sphone">Student's phone <span class="opt" data-t="optional">(optional)</span></label>
-      <input id="sphone" type="tel" inputmode="tel">
+      <div class="phone"><span class="cc">+961</span><input id="sphone" type="tel" inputmode="numeric" maxlength="12" placeholder="71 290 830"></div>
+      <div class="err"></div>
     </div>
 
     <div class="nav"><button class="go" type="button" data-next="1" data-t="next">Continue</button></div>
@@ -375,6 +380,7 @@ button.back:hover{border-color:var(--ink-soft)}
     </div>
 
     <div id="subjwrap" class="hide">
+      <div id="offer"></div>
       <div class="field">
         <label data-t="pick">Subjects</label>
         <div id="subjects"></div>
@@ -434,18 +440,41 @@ button.back:hover{border-color:var(--ink-soft)}
     <div class="row">
       <div class="field">
         <label for="gph" data-t="gph">Phone</label>
-        <input id="gph" type="tel" inputmode="tel" placeholder="+961 …">
+        <div class="phone"><span class="cc">+961</span><input id="gph" type="tel" inputmode="numeric" maxlength="12" placeholder="71 290 830"></div>
         <div class="err" data-t="req">Required</div>
       </div>
       <div class="field">
         <label for="gwa" data-t="gwa">WhatsApp <span class="opt" data-t="ifdiff">(if different)</span></label>
-        <input id="gwa" type="tel" inputmode="tel">
+        <div class="phone"><span class="cc">+961</span><input id="gwa" type="tel" inputmode="numeric" maxlength="12" placeholder="71 290 830"></div>
+        <div class="err"></div>
       </div>
     </div>
 
     <div class="field">
       <label for="gem" data-t="gem">Email <span class="opt" data-t="optional">(optional)</span></label>
       <input id="gem" type="email" inputmode="email" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label for="gocc" data-t="gocc">Occupation</label>
+      <input id="gocc" type="text" autocomplete="organization-title">
+      <div class="err" data-t="req">Required</div>
+    </div>
+
+    <div class="field">
+      <label for="siblings" data-t="sibq">Other children in the family</label>
+      <select id="siblings">
+        <option value="" data-t="choose">Choose…</option>
+        <option value="NONE" data-t="sibnone">No other children</option>
+        <option value="REGISTERED" data-t="sibreg">Yes, already studying here</option>
+        <option value="PLANNING" data-t="sibplan">Yes, planning to register</option>
+      </select>
+      <div class="err" data-t="req">Required</div>
+    </div>
+
+    <div class="field hide" id="sibdetwrap">
+      <label for="sibdet" data-t="sibdet">Their names and grades <span class="opt" data-t="optional">(optional)</span></label>
+      <input id="sibdet" type="text">
     </div>
 
     <div class="field">
@@ -486,8 +515,7 @@ button.back:hover{border-color:var(--ink-soft)}
     <div class="mark"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h2 data-t="hdone">Registration received</h2>
     <p class="hint" data-t="pdone">We'll contact you within two working days to confirm the timetable.</p>
-    <div class="refbox" id="ref">—</div>
-    <p class="hint" style="margin:0" data-t="keepref">Keep this reference for your records.</p>
+    <div id="doneSummary"></div>
     <div class="nav" style="margin-top:22px">
       <button class="back" type="button" style="flex:1" onclick="window.print()" data-t="print">Print this page</button>
     </div>
@@ -511,7 +539,13 @@ const T = {
     h3:"Parent or guardian",p3:"This is who we contact about schedules, attendance and fees.",
     h4:"Check and confirm",p4:"Take a moment to check these details before sending.",
     fn:"First name",ln:"Family name",dob:"Date of birth",gen:"Gender",male:"Male",female:"Female",
-    school:"Current school",sect:"Class section",sphone:"Student's phone",
+    school:"Current school",sphone:"Student's phone",
+    gocc:"Occupation",sibq:"Other children in the family",sibnone:"No other children",
+    sibreg:"Yes, already studying here",sibplan:"Yes, planning to register",
+    sibdet:"Their names and grades",
+    badphone:"Enter 8 digits, or 7 if the number starts with 3",
+    offerttl:"Package offer.",
+    offerbody:"All {n} subjects together are {price} a month instead of {full} — you save {save}.",
     gfn:"First name",gln:"Family name",grel:"Relation to student",father:"Father",mother:"Mother",
     grand:"Grandparent",sib:"Sibling",other:"Other",gph:"Phone",gwa:"WhatsApp",gem:"Email",
     notes:"Anything we should know",notesph:"Health conditions, learning needs, preferred days…",
@@ -521,7 +555,7 @@ const T = {
     reqagree:"Please confirm to continue",
     agree:"I confirm these details are correct and I accept the fee terms above.",
     hdone:"Registration received",pdone:"We'll contact you within two working days to confirm the timetable.",
-    keepref:"Keep this reference for your records.",print:"Print this page",help:"Need help? Call",
+    print:"Print this page",help:"Need help? Call",
     monthly:"Monthly fee",permonth:"per month",saving:"You save",vs:"instead of",
     ledgerlbl:"Your monthly fee",addall:"Add",andsave:"and pay",forprice:"for",insteadof:"instead of",
     addfree1:"Add",addfree0:"at no extra cost",addfreeless:"and your fee drops to",
@@ -540,7 +574,13 @@ const T = {
     h3:"وليّ الأمر",p3:"سنتواصل معه بخصوص المواعيد والحضور والأقساط.",
     h4:"المراجعة والتأكيد",p4:"يرجى مراجعة المعلومات قبل الإرسال.",
     fn:"الاسم",ln:"الشهرة",dob:"تاريخ الولادة",gen:"الجنس",male:"ذكر",female:"أنثى",
-    school:"المدرسة الحالية",sect:"الشعبة",sphone:"هاتف الطالب",
+    school:"المدرسة الحالية",sphone:"هاتف الطالب",
+    gocc:"المهنة",sibq:"إخوة في العائلة",sibnone:"لا يوجد",
+    sibreg:"نعم، مسجّلون لدينا",sibplan:"نعم، ننوي تسجيلهم",
+    sibdet:"أسماؤهم وصفوفهم",
+    badphone:"أدخل ٨ أرقام، أو ٧ إذا كان الرقم يبدأ بـ٣",
+    offerttl:"عرض الحزمة.",
+    offerbody:"المواد الـ{n} معاً بـ{price} شهرياً بدلاً من {full} — توفير {save}.",
     gfn:"الاسم",gln:"الشهرة",grel:"صلة القرابة",father:"الأب",mother:"الأم",
     grand:"الجد أو الجدة",sib:"أخ أو أخت",other:"غير ذلك",gph:"الهاتف",gwa:"واتساب",gem:"البريد الإلكتروني",
     notes:"معلومات إضافية",notesph:"حالة صحية، احتياجات تعليمية، أيام مفضّلة…",
@@ -550,7 +590,7 @@ const T = {
     reqagree:"يرجى التأكيد للمتابعة",
     agree:"أؤكد صحة المعلومات وأوافق على شروط الأقساط أعلاه.",
     hdone:"تم استلام التسجيل",pdone:"سنتواصل معكم خلال يومي عمل لتأكيد البرنامج.",
-    keepref:"يرجى الاحتفاظ بهذا الرقم.",print:"طباعة الصفحة",help:"للمساعدة اتصلوا بـ",
+    print:"طباعة الصفحة",help:"للمساعدة اتصلوا بـ",
     monthly:"القسط الشهري",permonth:"شهرياً",saving:"توفير",vs:"بدلاً من",
     ledgerlbl:"قسطكم الشهري",addall:"أضف",andsave:"وادفع",forprice:"مقابل",insteadof:"بدلاً من",
     addfree1:"أضف",addfree0:"دون أي كلفة إضافية",addfreeless:"وينخفض القسط إلى",
@@ -670,7 +710,7 @@ function applyLang(){
                               " / " + t("persession") + " — " + t("privatedesc");
   $$("[data-t]").forEach(el => el.textContent = t(el.dataset.t));
   $$("[data-t-ph]").forEach(el => el.placeholder = t(el.dataset.tPh));
-  renderGrades(); renderSubjects(); renderLedger();
+  renderGrades(); renderSubjects(); renderOffer(); renderLedger();
   if(state.step===4) renderReview();
 }
 
@@ -684,7 +724,7 @@ function renderGrades(){
     b.onclick = ()=>{
       state.grade = k; state.subjects = []; state.track = null;
       $("#e-grade").classList.remove("show");
-      renderGrades(); renderTrack(); renderSubjects(); renderLedger();
+      renderGrades(); renderTrack(); renderSubjects(); renderOffer(); renderLedger();
     };
     box.appendChild(b);
   });
@@ -702,7 +742,7 @@ function renderTrack(){
     state.track = sel.value;
     state.subjects = [];          // prices differ per track — start clean
     sel.classList.remove("bad");
-    renderSubjects(); renderLedger();
+    renderSubjects(); renderOffer(); renderLedger();
   };
 }
 
@@ -730,10 +770,39 @@ function renderSubjects(){
     b.onclick = ()=>{
       state.subjects = on ? state.subjects.filter(x=>x!==s.id) : [...state.subjects, s.id];
       $("#e-subj").classList.remove("show");
-      renderSubjects(); renderLedger();
+      renderSubjects(); renderOffer(); renderLedger();
     };
     box.appendChild(b);
   });
+}
+
+/** Advertises the full-set package BEFORE any subject is ticked, so a parent
+ *  who would otherwise choose two subjects and leave sees the offer first. */
+function renderOffer(){
+  const host = $("#offer");
+  if(!host) return;
+  host.innerHTML = "";
+  if(!state.grade) return;
+  const o = offerFor(state.grade, state.track);
+  if(!o || o.mode !== "SUBJECT" || o.priceOnRequest || !(o.bundles||[]).length) return;
+
+  const all = (o.subjects||[]).length;
+  const full = (o.subjects||[]).reduce((a,s)=>a+(s.monthly||0),0);
+
+  // Only advertise a bundle that covers every subject.
+  let best = null;
+  for(const b of o.bundles){
+    const n = b.minSubjects || (b.subjectIds ? b.subjectIds.length : 0);
+    if(n < all) continue;
+    if(!best || b.monthly < best.monthly) best = b;
+  }
+  if(!best) return;
+  const save = full - best.monthly;
+  if(save <= 0) return;
+
+  host.innerHTML = '<div class="offer"><b>' + t("offerttl") + '</b> ' +
+    t("offerbody").replace("{n}", all).replace("{price}", money(best.monthly))
+                  .replace("{full}", money(full)).replace("{save}", money(save)) + '</div>';
 }
 
 function renderLedger(){
@@ -809,6 +878,27 @@ function showSticky(txt){
   s.classList.remove("hide");
 }
 
+/** Shown after sending. A parent gets back what they actually chose and what
+ *  it costs — more use than an internal reference code. */
+function renderDone(){
+  const g = CONFIG.grades[state.grade];
+  const off = offerFor(state.grade, state.track);
+  const p = priceFor(state.grade, state.track, state.subjects);
+  const tr = (g.tracks||[]).find(x=>x.id===state.track);
+  const subjNames = g.mode==="SUBJECT"
+    ? (off.subjects||[]).filter(s=>state.subjects.includes(s.id)).map(nameOf).join(", ")
+    : nameOf(g.agenda);
+
+  const rows = [
+    [t("rstudent"), $("#fn").value + " " + $("#ln").value],
+    [t("rgrade"), (lang==="ar"?g.labelAr:g.label) + (tr ? " — " + nameOf(tr) : "")],
+    [g.mode==="SUBJECT" ? t("rsubjects") : t("rprogramme"), subjNames],
+    [t("rfee"), p.priceOnRequest ? t("onreq") : money(p.total) + " / " + t("permonth")]
+  ];
+  $("#doneSummary").innerHTML = '<div class="donesum">' + rows.map(([k,v])=>
+    '<div class="rev"><span class="k">'+k+'</span><span class="v">'+(v||"—")+'</span></div>').join("") + '</div>';
+}
+
 function renderReview(){
   const g = CONFIG.grades[state.grade];
   const p = priceFor(state.grade, state.track, state.subjects);
@@ -844,31 +934,83 @@ function show(n){
   if(n===4) renderReview();
 }
 
+/* --- Lebanese numbers -------------------------------------------------
+   Accepts anything a parent might type — 03 123456, 0096171290830,
+   +961 71 290 830 — and reduces it to the local part. Valid when it is
+   7 digits starting with 3, or 8 digits otherwise. */
+function normalizePhone(raw){
+  let d = String(raw||"").replace(/\D/g,"");
+  if(d.startsWith("00961")) d = d.slice(5);
+  else if(d.startsWith("961") && d.length > 9) d = d.slice(3);
+  d = d.replace(/^0+/,"");
+  return d;
+}
+function phoneValid(raw){
+  const d = normalizePhone(raw);
+  if(!d) return false;
+  return d.startsWith("3") ? d.length === 7 : d.length === 8;
+}
+function phoneFull(raw){
+  const d = normalizePhone(raw);
+  return d ? "+961" + d : "";
+}
+
+function mark(el, bad, msgKey){
+  (el.closest(".phone") || el).classList.toggle("bad", bad);
+  const e = el.closest(".field")?.querySelector(".err");
+  if(e){
+    if(msgKey) e.textContent = t(msgKey);
+    e.classList.toggle("show", bad);
+  }
+}
+
 function need(ids){
   let ok = true;
   ids.forEach(id=>{
     const el = $("#"+id), bad = !el.value.trim();
-    el.classList.toggle("bad", bad);
-    const e = el.parentElement.querySelector(".err");
-    if(e) e.classList.toggle("show", bad);
+    mark(el, bad, "req");
     if(bad) ok = false;
   });
   return ok;
 }
 
+/** Blank is allowed when the field is optional; anything typed must be valid. */
+function needPhone(id, required){
+  const el = $("#"+id), raw = el.value.trim();
+  if(!raw){ mark(el, required, "req"); return !required; }
+  const ok = phoneValid(raw);
+  mark(el, !ok, "badphone");
+  return ok;
+}
+
 $$("[data-next]").forEach(b => b.onclick = ()=>{
   const s = +b.dataset.next;
-  if(s===1 && !need(["fn","ln","dob","gen","school"])) return;
+  if(s===1){
+    const okFields = need(["fn","ln","dob","gen","school"]);
+    const okPhone  = needPhone("sphone", false);
+    if(!okFields || !okPhone) return;
+  }
   if(s===2){
     if(!state.grade){ $("#e-grade").classList.add("show"); return; }
     const g = CONFIG.grades[state.grade];
     if(g.tracks?.length && !state.track){ $("#track").classList.add("bad"); return; }
     if(g.mode==="SUBJECT" && !state.subjects.length){ $("#e-subj").classList.add("show"); return; }
   }
-  if(s===3 && !need(["gfn","gln","grel","gph"])) return;
+  if(s===3){
+    const okFields = need(["gfn","gln","grel","gocc","siblings"]);
+    const okPhone  = needPhone("gph", true);
+    const okWa     = needPhone("gwa", false);
+    if(!okFields || !okPhone || !okWa) return;
+  }
   show(s+1);
 });
 $$("[data-back]").forEach(b => b.onclick = ()=> show(+b.dataset.back - 1));
+
+$("#siblings").onchange = ()=>{
+  const v = $("#siblings").value;
+  $("#sibdetwrap").classList.toggle("hide", v !== "REGISTERED" && v !== "PLANNING");
+  mark($("#siblings"), false);
+};
 
 $("#lang").onclick = ()=>{ lang = lang==="ar" ? "en" : "ar"; applyLang(); };
 
@@ -898,8 +1040,7 @@ $("#submit").onclick = async ()=>{
     dateOfBirth:$("#dob").value,
     gender:     $("#gen").value,
     schoolName: $("#school").value.trim(),
-    schoolSection: $("#sect").value.trim(),
-    studentPhone:  $("#sphone").value.trim(),
+    studentPhone:  phoneFull($("#sphone").value),
     gradeCode: state.grade,
     gradeLabel: g.label,
     trackCode: state.track || "",
@@ -918,8 +1059,11 @@ $("#submit").onclick = async ()=>{
     guardianFirstName: $("#gfn").value.trim(),
     guardianLastName:  $("#gln").value.trim(),
     guardianRelation:  $("#grel").value,
-    guardianPhone:     $("#gph").value.trim(),
-    guardianWhatsapp:  $("#gwa").value.trim() || $("#gph").value.trim(),
+    guardianPhone:     phoneFull($("#gph").value),
+    guardianWhatsapp:  phoneFull($("#gwa").value) || phoneFull($("#gph").value),
+    guardianOccupation: $("#gocc").value.trim(),
+    siblingStatus:     $("#siblings").value,
+    siblingDetails:    $("#sibdet").value.trim(),
     guardianEmail:     $("#gem").value.trim(),
     notes: $("#notes").value.trim()
   };
@@ -929,8 +1073,7 @@ $("#submit").onclick = async ()=>{
 
   if(!CONFIG.scriptUrl){
     console.log("Registration payload (not sent — CONFIG.scriptUrl is empty):", payload);
-    $("#ref").textContent = "TEST-0001";
-    show(5); return;
+    renderDone(); show(5); return;
   }
 
   try{
@@ -940,10 +1083,7 @@ $("#submit").onclick = async ()=>{
       headers:{"Content-Type":"text/plain;charset=utf-8"},
       body: JSON.stringify(payload)
     });
-    const yr = CONFIG.academicYear.replace(/\D/g,"").slice(2,6) || "00";
-    $("#ref").textContent = "REG-" + yr + "-" +
-      String(Date.now()).slice(-5) + payload.lastName.slice(0,1).toUpperCase();
-    show(5);
+    renderDone(); show(5);
   }catch(e){
     console.error(e);
     err.textContent = t("failed");
